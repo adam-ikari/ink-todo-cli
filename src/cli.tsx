@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-import React, {useEffect} from 'react';
-import {render} from 'ink';
-import meow from 'meow';
-import App from './App.tsx';
-import {useStore} from './store/taskStore.ts';
+import React, { useEffect } from "react";
+import { render } from "ink";
+import meow from "meow";
+import App from "./App.tsx";
+import { useTaskStore } from "./store/taskStore.ts";
 
 const cli = meow(
-	`
+  `
 	Usage
 	  $ mdtd [file]
 
@@ -16,28 +16,28 @@ const cli = meow(
 	Arguments
 		file    Path to the todo file (default: todo.md)
 `,
-	{
-		importMeta: import.meta,
-		flags: {
-			lang: {
-				type: 'string',
-				default: 'en',
-			},
-		},
-		input: {
-			default: ['todo.md']
-		}
-	},
+  {
+    importMeta: import.meta,
+    flags: {
+      lang: {
+        type: "string",
+        default: "en",
+      },
+    },
+    input: {
+      default: ["todo.md"],
+    },
+  }
 );
 
 function Main() {
-	const {init} = useStore();
+  const { init } = useTaskStore();
 
-	useEffect(() => {
-		init(cli.flags.lang, cli.input[0]);
-	}, [init]);
+  useEffect(() => {
+    init(cli.flags.lang, cli.input[0]);
+  }, [init]);
 
-	return <App />;
+  return <App />;
 }
 
 render(<Main />);

@@ -4,7 +4,7 @@ import { loadTranslations as i18nLoad, t, TKey } from "../services/i18n.js";
 
 type Mode = "list" | "add" | "edit" | "error" | "loading";
 
-interface AppState {
+interface TaskState {
   // State
   tasks: Task[];
   selected: number;
@@ -29,7 +29,7 @@ interface AppState {
   editTask: (newLabel: string) => void;
 }
 
-export const useStore = create<AppState>((set, get) => ({
+export const useTaskStore = create<TaskState>((set, get) => ({
   // --- INITIAL STATE ---
   tasks: [],
   selected: 0,
@@ -47,7 +47,7 @@ export const useStore = create<AppState>((set, get) => ({
   init: async (lang: string, filePath = "todo.md") => {
     try {
       await i18nLoad(lang);
-      const tasks = await readTasks(filePath);
+    const tasks = await readTasks(filePath);
       set({ lang, tasks, mode: "list", filePath });
     } catch (err: any) {
       set({ mode: "error", message: err.message });
