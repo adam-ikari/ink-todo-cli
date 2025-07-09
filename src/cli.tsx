@@ -12,6 +12,7 @@ const cli = meow(
 
 	Options
 		--lang  Language to use (e.g., 'en', 'zh')
+		-f, --file  Path to the todo file (default: todo.md)
 `,
 	{
 		importMeta: import.meta,
@@ -19,6 +20,11 @@ const cli = meow(
 			lang: {
 				type: 'string',
 				default: 'en',
+			},
+			file: {
+				type: 'string',
+				default: 'todo.md',
+				shortFlag: 'f',
 			},
 		},
 	},
@@ -28,7 +34,7 @@ function Main() {
 	const {init} = useStore();
 
 	useEffect(() => {
-		init(cli.flags.lang);
+		init(cli.flags.lang, cli.flags.file);
 	}, [init]);
 
 	return <App />;

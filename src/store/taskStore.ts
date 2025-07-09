@@ -16,9 +16,10 @@ interface AppState {
   inputValue: string;
   message: string | null;
   lang: string;
+  filePath: string;
 
   // Actions
-  init: (lang: string) => Promise<void>;
+  init: (lang: string, filePath?: string) => Promise<void>;
   t: (key: TKey, params?: Record<string, string>) => string;
   setMode: (mode: Mode) => void;
   setInputValue: (value: string) => void;
@@ -38,17 +39,18 @@ export const useStore = create<AppState>((set, get) => ({
   inputValue: "",
   message: null,
   lang: "en",
+  filePath: "todo.md",
 
   // --- ACTIONS ---
 
   /**
    * Initializes the application by loading translations and tasks.
    */
-  init: async (lang: string) => {
+  init: async (lang: string, filePath = 'todo.md') => {
     try {
       await i18nLoad(lang);
-      const tasks = await readTasks();
-      set({ lang, tasks, mode: "list" });
+      const tasks = await readTasks(filePath);
+      set({ lang, tasks, mode: "list", filePath });
     } catch (err: any) {
       set({ mode: "error", message: err.message });
     }
@@ -89,7 +91,7 @@ export const useStore = create<AppState>((set, get) => ({
         tasks: newTasks,
         message: t("messageAdded", { task: inputValue }),
       });
-      writeTasks(newTasks);
+      writeTasks(newTasks, get().filePath);
     }
     set({ inputValue: "", mode: "list" });
   },

@@ -4,9 +4,6 @@
 # Build output
 /dist
 
-# Data file
-/todo.md
-
 # Logs
 npm-debug.log*
 yarn-error.log*
