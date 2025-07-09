@@ -26,9 +26,14 @@ function parseTasks(content: string): Task[] {
  * @returns A string formatted for the markdown file.
  */
 function formatTasks(tasks: Task[]): string {
-	return tasks
-		.map(task => `- [${task.completed ? 'x' : ' '}] ${task.label}`)
-		.join('\n\n');
+	if (tasks.length === 0) {
+		return '';
+	}
+
+	const title = "# TODO\n";
+	const content = tasks
+		.map(task => `- [${task.completed ? 'x' : ' '}] ${task.label}`).join('\n');
+	return [title, content].join('\n') + "\n";
 }
 
 /**
