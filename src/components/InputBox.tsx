@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, Box, useInput } from "ink";
+import { Text, Box } from "ink";
 import stringWidth from "string-width";
 
 type Props = {

@@ -1,10 +1,6 @@
 import { create } from "zustand";
 import { Task, readTasks, writeTasks } from "../services/fileManager.js";
-import {
-  loadTranslations as i18nLoad,
-  t as i18nT,
-  TKey,
-} from "../services/i18n.js";
+import { loadTranslations as i18nLoad, t, TKey } from "../services/i18n.js";
 
 type Mode = "list" | "add" | "edit" | "error" | "loading";
 
@@ -20,7 +16,6 @@ interface AppState {
 
   // Actions
   init: (lang: string, filePath?: string) => Promise<void>;
-  t: (key: TKey, params?: Record<string, string>) => string;
   setMode: (mode: Mode) => void;
   setInputValue: (value: string) => void;
   clearMessage: () => void;
@@ -57,13 +52,6 @@ export const useStore = create<AppState>((set, get) => ({
     } catch (err: any) {
       set({ mode: "error", message: err.message });
     }
-  },
-
-  /**
-   * Gets a translation for the current language.
-   */
-  t: (key: TKey, params: Record<string, string> = {}) => {
-    return i18nT(key, params);
   },
 
   setMode: (mode: Mode) => set({ mode }),
@@ -119,7 +107,7 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   addTask: () => {
-    const { inputValue, tasks, t, mode, selected } = get();
+    const { inputValue, tasks, mode, selected } = get();
     if (inputValue) {
       let newTasks;
       let messageKey;
@@ -144,7 +132,7 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   toggleTask: () => {
-    const { tasks, selected, t } = get();
+    const { tasks, selected } = get();
     if (tasks[selected]) {
       const newTasks = tasks.map((task, i) =>
         i === selected ? { ...task, completed: !task.completed } : task
@@ -159,7 +147,7 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   deleteTask: () => {
-    const { tasks, selected, t } = get();
+    const { tasks, selected } = get();
     if (tasks[selected]) {
       const taskToDelete = tasks[selected];
       const newTasks = tasks.filter((_, i) => i !== selected);
@@ -178,7 +166,7 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   editTask: (newLabel: string) => {
-    const { tasks, selected, t } = get();
+    const { tasks, selected } = get();
     if (tasks[selected] && newLabel) {
       const newTasks = tasks.map((task, i) =>
         i === selected ? { ...task, label: newLabel } : task

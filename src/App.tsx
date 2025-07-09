@@ -2,6 +2,7 @@ import React from "react";
 import { Text, Box, Newline, useInput, useApp } from "ink";
 import { useStore } from "./store/taskStore.ts";
 import InputBox from "./components/InputBox.tsx";
+import { t } from "./services/i18n.js";
 
 export default function App() {
   const { exit } = useApp();
@@ -11,7 +12,6 @@ export default function App() {
     tasks,
     selected,
     inputValue,
-    t,
     clearMessage,
     setMode,
     setInputValue,
