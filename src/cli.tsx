@@ -8,11 +8,13 @@ import {useStore} from './store/taskStore.js';
 const cli = meow(
 	`
 	Usage
-	  $ mdtd
+	  $ mdtd [file]
 
 	Options
 		--lang  Language to use (e.g., 'en', 'zh')
-		-f, --file  Path to the todo file (default: todo.md)
+
+	Arguments
+		file    Path to the todo file (default: todo.md)
 `,
 	{
 		importMeta: import.meta,
@@ -21,12 +23,10 @@ const cli = meow(
 				type: 'string',
 				default: 'en',
 			},
-			file: {
-				type: 'string',
-				default: 'todo.md',
-				shortFlag: 'f',
-			},
 		},
+		input: {
+			default: ['todo.md']
+		}
 	},
 );
 
@@ -34,7 +34,7 @@ function Main() {
 	const {init} = useStore();
 
 	useEffect(() => {
-		init(cli.flags.lang, cli.flags.file);
+		init(cli.flags.lang, cli.input[0]);
 	}, [init]);
 
 	return <App />;
