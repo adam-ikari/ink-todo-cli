@@ -5,7 +5,8 @@
   "bin": "dist/cli.js",
   "main": "dist/cli.js",
   "scripts": {
-    "build": "tsc",
+    "build": "esbuild src/cli.tsx --bundle --platform=node --target=node16 --outfile=dist/cli.js --format=esm --external:react --external:ink --external:zustand --external:chalk --external:meow",
+    "build:tsc": "tsc",
     "start": "node dist/cli.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@types/node": "^24.0.12",
     "@types/react": "^19.1.8",
+    "esbuild": "^0.25.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
