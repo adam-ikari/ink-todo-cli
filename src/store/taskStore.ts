@@ -1,14 +1,10 @@
 import { create } from "zustand";
 import { Task, readTasks, writeTasks } from "../services/fileManager.js";
-import {
-  loadTranslations as i18nLoad,
-  t as i18nT,
-  TKey,
-} from "../services/i18n.js";
+import { loadTranslations as i18nLoad, t, TKey } from "../services/i18n.js";
 
 type Mode = "list" | "add" | "edit" | "error" | "loading";
 
-interface AppState {
+interface TaskState {
   // State
   tasks: Task[];
   selected: number;
@@ -20,19 +16,20 @@ interface AppState {
 
   // Actions
   init: (lang: string, filePath?: string) => Promise<void>;
-  t: (key: TKey, params?: Record<string, string>) => string;
   setMode: (mode: Mode) => void;
   setInputValue: (value: string) => void;
   clearMessage: () => void;
   moveUp: () => void;
   moveDown: () => void;
+  moveTaskUp: () => void;
+  moveTaskDown: () => void;
   addTask: () => void;
   toggleTask: () => void;
   deleteTask: () => void;
   editTask: (newLabel: string) => void;
 }
 
-export const useStore = create<AppState>((set, get) => ({
+export const useTaskStore = create<TaskState>((set, get) => ({
   // --- INITIAL STATE ---
   tasks: [],
   selected: 0,
@@ -50,18 +47,11 @@ export const useStore = create<AppState>((set, get) => ({
   init: async (lang: string, filePath = "todo.md") => {
     try {
       await i18nLoad(lang);
-      const tasks = await readTasks(filePath);
+    const tasks = await readTasks(filePath);
       set({ lang, tasks, mode: "list", filePath });
     } catch (err: any) {
       set({ mode: "error", message: err.message });
     }
-  },
-
-  /**
-   * Gets a translation for the current language.
-   */
-  t: (key: TKey, params: Record<string, string> = {}) => {
-    return i18nT(key, params);
   },
 
   setMode: (mode: Mode) => set({ mode }),
@@ -87,12 +77,15 @@ export const useStore = create<AppState>((set, get) => ({
   moveTaskUp: () => {
     const { tasks, selected, filePath } = get();
     if (selected <= 0 || tasks.length <= 1) return;
-    
+
     const newTasks = [...tasks];
-    [newTasks[selected], newTasks[selected - 1]] = [newTasks[selected - 1], newTasks[selected]];
+    [newTasks[selected], newTasks[selected - 1]] = [
+      newTasks[selected - 1],
+      newTasks[selected],
+    ];
     set({
       tasks: newTasks,
-      selected: selected - 1
+      selected: selected - 1,
     });
     writeTasks(newTasks, filePath);
   },
@@ -100,18 +93,21 @@ export const useStore = create<AppState>((set, get) => ({
   moveTaskDown: () => {
     const { tasks, selected, filePath } = get();
     if (selected >= tasks.length - 1 || tasks.length <= 1) return;
-    
+
     const newTasks = [...tasks];
-    [newTasks[selected], newTasks[selected + 1]] = [newTasks[selected + 1], newTasks[selected]];
+    [newTasks[selected], newTasks[selected + 1]] = [
+      newTasks[selected + 1],
+      newTasks[selected],
+    ];
     set({
       tasks: newTasks,
-      selected: selected + 1
+      selected: selected + 1,
     });
     writeTasks(newTasks, filePath);
   },
 
   addTask: () => {
-    const { inputValue, tasks, t, mode, selected } = get();
+    const { inputValue, tasks, mode, selected } = get();
     if (inputValue) {
       let newTasks;
       let messageKey;
@@ -136,7 +132,7 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   toggleTask: () => {
-    const { tasks, selected, t } = get();
+    const { tasks, selected } = get();
     if (tasks[selected]) {
       const newTasks = tasks.map((task, i) =>
         i === selected ? { ...task, completed: !task.completed } : task
@@ -151,7 +147,7 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   deleteTask: () => {
-    const { tasks, selected, t } = get();
+    const { tasks, selected } = get();
     if (tasks[selected]) {
       const taskToDelete = tasks[selected];
       const newTasks = tasks.filter((_, i) => i !== selected);
@@ -170,7 +166,7 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   editTask: (newLabel: string) => {
-    const { tasks, selected, t } = get();
+    const { tasks, selected } = get();
     if (tasks[selected] && newLabel) {
       const newTasks = tasks.map((task, i) =>
         i === selected ? { ...task, label: newLabel } : task

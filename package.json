@@ -8,6 +8,7 @@
   "main": "dist/cli.js",
   "scripts": {
     "build": "node esbuild.config.js",
+    "build:prod": "NODE_ENV=production yarn build",
     "start": "node dist/cli.js",
     "prepublishOnly": "yarn build",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -35,9 +36,13 @@
     "zustand": "^5.0.6"
   },
   "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
     "@types/node": "^24.0.12",
     "@types/react": "^19.1.8",
     "esbuild": "^0.25.6",
+    "terser": "^5.27.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, Box, Newline, useInput, useApp } from "ink";
-import { useStore } from "./store/taskStore.ts";
+import { useTaskStore } from "./store/taskStore.ts";
 import InputBox from "./components/InputBox.tsx";
+import { t } from "./services/i18n.js";
 
 export default function App() {
   const { exit } = useApp();
@@ -11,7 +12,6 @@ export default function App() {
     tasks,
     selected,
     inputValue,
-    t,
     clearMessage,
     setMode,
     setInputValue,
@@ -22,7 +22,7 @@ export default function App() {
     addTask,
     toggleTask,
     deleteTask,
-  } = useStore();
+  } = useTaskStore();
 
   useInput((input, key) => {
     if (message) clearMessage();
