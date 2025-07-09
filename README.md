@@ -26,14 +26,19 @@ todo -f todo.md
 
 1. Clone the repository
 2. Install dependencies:
+
    ```bash
    npm install
    ```
+
 3. Build the project:
+
    ```bash
    npm run build
    ```
+
 4. Run the app:
+
    ```bash
    npm start
    ```
