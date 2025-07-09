@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, Box, Newline, useInput, useApp } from "ink";
-import { useStore } from "../store/taskStore.js";
+import { useStore } from "./store/taskStore.js";
 
 export default function App() {
   const { exit } = useApp();
@@ -91,14 +91,7 @@ export default function App() {
       <Newline />
 
       {(mode === "add" || mode === "edit") && (
-        <Box>
-          <Text>
-            {mode === "add"
-              ? t("addTaskPrompt", { inputValue })
-              : t("editTaskPrompt", { inputValue })
-            }
-          </Text>
-        </Box>
+        <InputBox mode={mode} inputValue={inputValue} t={t} />
       )}
 
       {message && <Text color="green">{message}</Text>}
