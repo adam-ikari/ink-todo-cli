@@ -1,17 +1,17 @@
-# ink-todo-cli
+# mdtodo
 
-A beautiful terminal todo app built with Ink and React
+A beautiful terminal UI todo app built with Ink and React
 
 ## Installation
 
 ```bash
-npm install -g todo-cli
+npm install -g mdtodo
 ```
 
 Or use npx to run it directly:
 
 ```bash
-npx todo-cli
+npx mdtodo
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ npx todo-cli
 After installation, run:
 
 ```bash
-todo -f todo.md
+mdtodo -f todo.md
 ```
 
 ## Development

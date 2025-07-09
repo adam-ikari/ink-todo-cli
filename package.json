@@ -1,5 +1,5 @@
 {
-  "name": "todo-cli",
+  "name": "mdtodo",
   "version": "1.0.1",
   "type": "module",
   "bin": {
@@ -12,11 +12,20 @@
     "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["todo", "cli", "ink", "react"],
+  "keywords": [
+    "markdown",
+    "todo",
+    "cli",
+    "ink",
+    "react"
+  ],
   "author": "Adam Ikara <adam-ikari@outlook.com>",
   "license": "ISC",
-  "description": "A beautiful terminal todo app built with Ink and React",
-  "files": ["dist", "src"],
+  "description": "A beautiful terminal UI todo app built with Ink and React",
+  "files": [
+    "dist",
+    "src"
+  ],
   "dependencies": {
     "chalk": "^5.4.1",
     "ink": "^6.0.1",
