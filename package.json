@@ -1,18 +1,22 @@
 {
-  "name": "ink-todo-cli",
-  "version": "1.0.0",
+  "name": "todo-cli",
+  "version": "1.0.1",
   "type": "module",
-  "bin": "dist/cli.js",
+  "bin": {
+    "todo": "dist/cli.js"
+  },
   "main": "dist/cli.js",
   "scripts": {
     "build": "node esbuild.config.js",
     "start": "node dist/cli.js",
+    "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["todo", "cli", "ink", "react"],
+  "author": "Adam Ikara <adam-ikari@outlook.com>",
   "license": "ISC",
-  "description": "",
+  "description": "A beautiful terminal todo app built with Ink and React",
+  "files": ["dist", "src"],
   "dependencies": {
     "chalk": "^5.4.1",
     "ink": "^6.0.1",
