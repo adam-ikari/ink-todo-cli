@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, Box, Newline, useInput, useApp } from "ink";
-import { useStore } from "../store/taskStore.js";
+import { useStore } from "./store/taskStore.js";
 
 export default function App() {
   const { exit } = useApp();
