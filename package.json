@@ -1,6 +1,6 @@
 {
   "name": "mdtd",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "bin": {
     "mdtd": "dist/cli.js"
@@ -9,7 +9,7 @@
   "scripts": {
     "build": "node esbuild.config.js",
     "start": "node dist/cli.js",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "yarn build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
