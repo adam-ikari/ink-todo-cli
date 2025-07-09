@@ -77,6 +77,7 @@ export async function writeTasks(tasks: Task[], filePath = 'todo.md'): Promise<v
 
 	let meta = '';
 	try {
+		const stats = await fs.stat(fullPath);
 		const existingContent = await fs.readFile(fullPath, 'utf-8');
 		if (existingContent.startsWith('---\n')) {
 			const endOfMeta = existingContent.indexOf('\n---\n', 4);
@@ -85,9 +86,12 @@ export async function writeTasks(tasks: Task[], filePath = 'todo.md'): Promise<v
 				const existingMeta = existingContent.slice(4, endOfMeta);
 				meta = existingMeta.replace(/modified: .*/, `modified: ${now}`);
 				if (!meta.includes('created:')) {
-					meta += `\ncreated: ${now}`;
+					meta += `\ncreated: ${stats.birthtime.toISOString()}`;
 				}
 			}
+		} else {
+			// File exists but has no meta - use file creation time
+			meta = `created: ${stats.birthtime.toISOString()}\nmodified: ${now}`;
 		}
 	} catch (error: any) {
 		if (error.code === 'ENOENT') {
@@ -98,8 +102,6 @@ export async function writeTasks(tasks: Task[], filePath = 'todo.md'): Promise<v
 		}
 	}
 
-	const content = meta
-		? `---\n${meta}\n---\n\n${formatTasks(tasks)}`
-		: formatTasks(tasks);
+	const content = `---\n${meta}\n---\n\n${formatTasks(tasks)}`;
 	await fs.writeFile(fullPath, content, 'utf-8');
 }
