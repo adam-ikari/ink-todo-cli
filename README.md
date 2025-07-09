@@ -1,17 +1,17 @@
-# mdtodo
+# mdtd
 
 A beautiful terminal UI todo app built with Ink and React
 
 ## Installation
 
 ```bash
-npm install -g mdtodo
+npm install -g mdtd
 ```
 
 Or use npx to run it directly:
 
 ```bash
-npx mdtodo
+npx mdtd
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ npx mdtodo
 After installation, run:
 
 ```bash
-mdtodo -f todo.md
+mdtd -f todo.md
 ```
 
 ## Development
