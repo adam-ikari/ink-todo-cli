@@ -28,11 +28,12 @@ const config = {
   format: 'esm',
   external: ['react', 'ink', 'zustand', 'chalk', 'meow'],
   plugins: [babelPlugin],
-  minify: true,
-  mangleProps: /^_/,
-  minifyIdentifiers: true,
-  minifySyntax: true,
-  minifyWhitespace: true
+  minify: process.env.NODE_ENV === 'production',
+  mangleProps: process.env.NODE_ENV === 'production' ? /^_/ : undefined,
+  minifyIdentifiers: process.env.NODE_ENV === 'production',
+  minifySyntax: process.env.NODE_ENV === 'production',
+  minifyWhitespace: process.env.NODE_ENV === 'production',
+  sourcemap: process.env.NODE_ENV !== 'production'
 };
 
 esbuild.build(config).catch(() => process.exit(1));
