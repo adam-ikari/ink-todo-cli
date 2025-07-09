@@ -107,7 +107,7 @@ export const useStore = create<AppState>((set, get) => ({
         tasks: newTasks,
         message: t("messageToggled", { task: task.label }),
       });
-      writeTasks(newTasks);
+      writeTasks(newTasks, get().filePath);
     }
   },
 
@@ -126,7 +126,7 @@ export const useStore = create<AppState>((set, get) => ({
         selected: newSelected,
         message: t("messageDeleted", { task: taskToDelete.label }),
       });
-      writeTasks(newTasks);
+      writeTasks(newTasks, get().filePath);
     }
   },
 }));
