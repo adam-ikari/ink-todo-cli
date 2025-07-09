@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Text, Box, useInput } from "ink";
-import type { TKey } from "../services/i18n.js";
 import stringWidth from "string-width";
 
-type TFunction = (key: TKey, params: { inputValue: string }) => string;
-
 type Props = {
-  mode: "add" | "edit";
   inputValue: string;
-  t: TFunction;
+  width?: number;
+  label?: string;
 };
 
 function getVisualWidth(str: string) {
   return stringWidth(str);
 }
 
-export default function InputBox({ mode, inputValue, t }: Props) {
+export default function InputBox({ inputValue, width, label }: Props) {
   const [showCursor, setShowCursor] = useState(true);
   const [cursorPos, setCursorPos] = useState(inputValue.length);
 
@@ -32,16 +29,12 @@ export default function InputBox({ mode, inputValue, t }: Props) {
   }, [inputValue]);
 
   const visualWidth = getVisualWidth(inputValue);
-  const minWidth = 8;
+  const minWidth = width ?? 8;
   const padding = Math.max(0, minWidth - visualWidth);
 
   return (
     <Box>
-      <Text>
-        {mode === "add"
-          ? t("addTaskPrompt", { inputValue: "" })
-          : t("editTaskPrompt", { inputValue: "" })}
-      </Text>
+      {label && <Text>{label}</Text>}
       <Text backgroundColor="gray">
         {inputValue.slice(0, cursorPos)}
         {showCursor ? "█" : inputValue.slice(cursorPos, cursorPos + 1) || " "}

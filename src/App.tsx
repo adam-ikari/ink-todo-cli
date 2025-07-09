@@ -92,7 +92,10 @@ export default function App() {
       <Newline />
 
       {(mode === "add" || mode === "edit") && (
-        <InputBox mode={mode} inputValue={inputValue} t={t} />
+        <InputBox
+          inputValue={inputValue}
+          label={mode === "add" ? t("addTaskPrompt", { inputValue: "" }) : t("editTaskPrompt", { inputValue: "" })}
+        />
       )}
 
       {message && <Text color="green">{message}</Text>}
