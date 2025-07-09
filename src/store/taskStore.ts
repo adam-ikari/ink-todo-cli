@@ -72,16 +72,16 @@ export const useStore = create<AppState>((set, get) => ({
 
   moveUp: () => {
     const { tasks, selected } = get();
-    if (tasks.length > 0) {
-      set({ selected: (selected - 1 + tasks.length) % tasks.length });
-    }
+    if (tasks.length === 0) return;
+    const newSelected = selected > 0 ? selected - 1 : tasks.length - 1;
+    set({ selected: newSelected });
   },
 
   moveDown: () => {
     const { tasks, selected } = get();
-    if (tasks.length > 0) {
-      set({ selected: (selected + 1) % tasks.length });
-    }
+    if (tasks.length === 0) return;
+    const newSelected = selected < tasks.length - 1 ? selected + 1 : 0;
+    set({ selected: newSelected });
   },
 
   addTask: () => {

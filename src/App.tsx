@@ -37,33 +37,31 @@ export default function App() {
     }
 
     if (mode === "list") {
-      switch (input) {
-        case "q":
-          exit();
-          return;
-        case "j":
-        case "ArrowDown":
-          moveDown();
-          break;
-        case "k":
-        case "ArrowUp":
-          moveUp();
-          break;
-        case " ":
-          toggleTask();
-          break;
-        case "d":
-          deleteTask();
-          break;
-        case "a":
-          setMode("add");
-          break;
-        case "e":
-          if (tasks[selected]) {
-            setInputValue(tasks[selected].label);
-            setMode("edit");
-          }
-          break;
+      if (key.downArrow || input === "j") {
+        moveDown();
+      } else if (key.upArrow || input === "k") {
+        moveUp();
+      } else {
+        switch (input) {
+          case "q":
+            exit();
+            return;
+          case " ":
+            toggleTask();
+            break;
+          case "d":
+            deleteTask();
+            break;
+          case "a":
+            setMode("add");
+            break;
+          case "e":
+            if (tasks[selected]) {
+              setInputValue(tasks[selected].label);
+              setMode("edit");
+            }
+            break;
+        }
       }
     }
   });
@@ -94,7 +92,11 @@ export default function App() {
       {(mode === "add" || mode === "edit") && (
         <InputBox
           inputValue={inputValue}
-          label={mode === "add" ? t("addTaskPrompt", { inputValue: "" }) : t("editTaskPrompt", { inputValue: "" })}
+          label={
+            mode === "add"
+              ? t("addTaskPrompt", { inputValue: "" })
+              : t("editTaskPrompt", { inputValue: "" })
+          }
         />
       )}
 
