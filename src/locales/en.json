@@ -8,6 +8,6 @@
   "messageToggled": "Toggled: \"{task}\"",
   "messageDeleted": "Deleted: \"{task}\"",
   "messageEdited": "Edited: \"{task}\"",
-  "controlsList": "(a)dd | (e)dit | (space) Toggle Done | (d)elete | (j/k)ove | (q)uit",
+  "controlsList": "(a)dd | (e)dit | (space) Toggle Done | (d)elete | (j/k)select | (shift+j/k)move | (q)uit",
   "controlsAdd": "Type task and press Enter to save"
 }

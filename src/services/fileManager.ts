@@ -12,7 +12,16 @@ export interface Task {
  * @returns An array of Task objects.
  */
 function parseTasks(content: string): Task[] {
-	const lines = content.split('\n').filter(line => line.startsWith('- ['));
+	// Skip YAML front matter if present
+	let contentWithoutMeta = content;
+	if (content.startsWith('---\n')) {
+		const endOfMeta = content.indexOf('\n---\n', 4);
+		if (endOfMeta > 0) {
+			contentWithoutMeta = content.slice(endOfMeta + 5);
+		}
+	}
+
+	const lines = contentWithoutMeta.split('\n').filter(line => line.startsWith('- ['));
 	return lines.map(line => {
 		const completed = line.startsWith('- [x]');
 		const label = line.replace(/- \[[x ]\] /, '').trim();
@@ -26,9 +35,14 @@ function parseTasks(content: string): Task[] {
  * @returns A string formatted for the markdown file.
  */
 function formatTasks(tasks: Task[]): string {
-	return tasks
-		.map(task => `- [${task.completed ? 'x' : ' '}] ${task.label}`)
-		.join('\n');
+	if (tasks.length === 0) {
+		return '';
+	}
+
+	const title = "# TODO\n";
+	const content = tasks
+		.map(task => `- [${task.completed ? 'x' : ' '}] ${task.label}`).join('\n');
+	return [title, content].join('\n') + "\n";
 }
 
 /**
@@ -59,6 +73,35 @@ export async function readTasks(filePath = 'todo.md'): Promise<Task[]> {
  */
 export async function writeTasks(tasks: Task[], filePath = 'todo.md'): Promise<void> {
 	const fullPath = path.resolve(process.cwd(), filePath);
-	const content = formatTasks(tasks);
+	const now = new Date().toISOString();
+
+	let meta = '';
+	try {
+		const stats = await fs.stat(fullPath);
+		const existingContent = await fs.readFile(fullPath, 'utf-8');
+		if (existingContent.startsWith('---\n')) {
+			const endOfMeta = existingContent.indexOf('\n---\n', 4);
+			if (endOfMeta > 0) {
+				// Update existing meta
+				const existingMeta = existingContent.slice(4, endOfMeta);
+				meta = existingMeta.replace(/modified: .*/, `modified: ${now}`);
+				if (!meta.includes('created:')) {
+					meta += `\ncreated: ${stats.birthtime.toISOString()}`;
+				}
+			}
+		} else {
+			// File exists but has no meta - use file creation time
+			meta = `created: ${stats.birthtime.toISOString()}\nmodified: ${now}`;
+		}
+	} catch (error: any) {
+		if (error.code === 'ENOENT') {
+			// New file - create fresh meta
+			meta = `created: ${now}\nmodified: ${now}`;
+		} else {
+			throw error;
+		}
+	}
+
+	const content = `---\n${meta}\n---\n\n${formatTasks(tasks)}`;
 	await fs.writeFile(fullPath, content, 'utf-8');
 }

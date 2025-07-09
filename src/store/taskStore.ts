@@ -47,7 +47,7 @@ export const useStore = create<AppState>((set, get) => ({
   /**
    * Initializes the application by loading translations and tasks.
    */
-  init: async (lang: string, filePath = 'todo.md') => {
+  init: async (lang: string, filePath = "todo.md") => {
     try {
       await i18nLoad(lang);
       const tasks = await readTasks(filePath);
@@ -72,16 +72,42 @@ export const useStore = create<AppState>((set, get) => ({
 
   moveUp: () => {
     const { tasks, selected } = get();
-    if (tasks.length > 0) {
-      set({ selected: (selected - 1 + tasks.length) % tasks.length });
-    }
+    if (tasks.length === 0) return;
+    const newSelected = selected > 0 ? selected - 1 : tasks.length - 1;
+    set({ selected: newSelected });
   },
 
   moveDown: () => {
     const { tasks, selected } = get();
-    if (tasks.length > 0) {
-      set({ selected: (selected + 1) % tasks.length });
-    }
+    if (tasks.length === 0) return;
+    const newSelected = selected < tasks.length - 1 ? selected + 1 : 0;
+    set({ selected: newSelected });
+  },
+
+  moveTaskUp: () => {
+    const { tasks, selected, filePath } = get();
+    if (selected <= 0 || tasks.length <= 1) return;
+    
+    const newTasks = [...tasks];
+    [newTasks[selected], newTasks[selected - 1]] = [newTasks[selected - 1], newTasks[selected]];
+    set({
+      tasks: newTasks,
+      selected: selected - 1
+    });
+    writeTasks(newTasks, filePath);
+  },
+
+  moveTaskDown: () => {
+    const { tasks, selected, filePath } = get();
+    if (selected >= tasks.length - 1 || tasks.length <= 1) return;
+    
+    const newTasks = [...tasks];
+    [newTasks[selected], newTasks[selected + 1]] = [newTasks[selected + 1], newTasks[selected]];
+    set({
+      tasks: newTasks,
+      selected: selected + 1
+    });
+    writeTasks(newTasks, filePath);
   },
 
   addTask: () => {
@@ -89,7 +115,7 @@ export const useStore = create<AppState>((set, get) => ({
     if (inputValue) {
       let newTasks;
       let messageKey;
-      
+
       if (mode === "edit") {
         newTasks = tasks.map((task, i) =>
           i === selected ? { ...task, label: inputValue } : task
@@ -102,7 +128,7 @@ export const useStore = create<AppState>((set, get) => ({
 
       set({
         tasks: newTasks,
-        message: t(messageKey, { task: inputValue }),
+        message: t(messageKey as TKey, { task: inputValue }),
       });
       writeTasks(newTasks, get().filePath);
     }

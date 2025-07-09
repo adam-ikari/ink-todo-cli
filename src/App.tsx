@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, Box, Newline, useInput, useApp } from "ink";
-import { useStore } from "./store/taskStore.js";
-import InputBox from "./components/InputBox.js";
+import { useStore } from "./store/taskStore.ts";
+import InputBox from "./components/InputBox.tsx";
 
 export default function App() {
   const { exit } = useApp();
@@ -17,6 +17,8 @@ export default function App() {
     setInputValue,
     moveUp,
     moveDown,
+    moveTaskUp,
+    moveTaskDown,
     addTask,
     toggleTask,
     deleteTask,
@@ -37,33 +39,39 @@ export default function App() {
     }
 
     if (mode === "list") {
-      switch (input) {
-        case "q":
-          exit();
-          return;
-        case "j":
-        case "ArrowDown":
-          moveDown();
-          break;
-        case "k":
-        case "ArrowUp":
-          moveUp();
-          break;
-        case " ":
-          toggleTask();
-          break;
-        case "d":
-          deleteTask();
-          break;
-        case "a":
-          setMode("add");
-          break;
-        case "e":
-          if (tasks[selected]) {
-            setInputValue(tasks[selected].label);
-            setMode("edit");
-          }
-          break;
+      if (key.shift && (key.downArrow || input === "j" || input === "J")) {
+        moveTaskDown();
+      } else if (key.shift && (key.upArrow || input === "k" || input === "K")) {
+        moveTaskUp();
+      } else if (key.downArrow || input === "j" || input === "J") {
+        moveDown();
+      } else if (key.upArrow || input === "k" || input === "K") {
+        moveUp();
+      } else {
+        switch (input) {
+          case "q":
+          case "Q":
+            exit();
+            return;
+          case " ":
+            toggleTask();
+            break;
+          case "d":
+          case "D":
+            deleteTask();
+            break;
+          case "a":
+          case "A":
+            setMode("add");
+            break;
+          case "e":
+          case "E":
+            if (tasks[selected]) {
+              setInputValue(tasks[selected].label);
+              setMode("edit");
+            }
+            break;
+        }
       }
     }
   });
@@ -92,7 +100,14 @@ export default function App() {
       <Newline />
 
       {(mode === "add" || mode === "edit") && (
-        <InputBox mode={mode} inputValue={inputValue} t={t} />
+        <InputBox
+          inputValue={inputValue}
+          label={
+            mode === "add"
+              ? t("addTaskPrompt", { inputValue: "" })
+              : t("editTaskPrompt", { inputValue: "" })
+          }
+        />
       )}
 
       {message && <Text color="green">{message}</Text>}
