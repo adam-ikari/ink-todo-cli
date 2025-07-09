@@ -26,6 +26,8 @@ interface AppState {
   clearMessage: () => void;
   moveUp: () => void;
   moveDown: () => void;
+  moveTaskUp: () => void;
+  moveTaskDown: () => void;
   addTask: () => void;
   toggleTask: () => void;
   deleteTask: () => void;
@@ -87,12 +89,15 @@ export const useStore = create<AppState>((set, get) => ({
   moveTaskUp: () => {
     const { tasks, selected, filePath } = get();
     if (selected <= 0 || tasks.length <= 1) return;
-    
+
     const newTasks = [...tasks];
-    [newTasks[selected], newTasks[selected - 1]] = [newTasks[selected - 1], newTasks[selected]];
+    [newTasks[selected], newTasks[selected - 1]] = [
+      newTasks[selected - 1],
+      newTasks[selected],
+    ];
     set({
       tasks: newTasks,
-      selected: selected - 1
+      selected: selected - 1,
     });
     writeTasks(newTasks, filePath);
   },
@@ -100,12 +105,15 @@ export const useStore = create<AppState>((set, get) => ({
   moveTaskDown: () => {
     const { tasks, selected, filePath } = get();
     if (selected >= tasks.length - 1 || tasks.length <= 1) return;
-    
+
     const newTasks = [...tasks];
-    [newTasks[selected], newTasks[selected + 1]] = [newTasks[selected + 1], newTasks[selected]];
+    [newTasks[selected], newTasks[selected + 1]] = [
+      newTasks[selected + 1],
+      newTasks[selected],
+    ];
     set({
       tasks: newTasks,
-      selected: selected + 1
+      selected: selected + 1,
     });
     writeTasks(newTasks, filePath);
   },
