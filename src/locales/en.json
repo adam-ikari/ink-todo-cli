@@ -1,0 +1,10 @@
+{
+  "appTitle": "Todo TUI",
+  "noTasks": "No tasks. Press 'a' to add one.",
+  "addTaskPrompt": "Add Task: {inputValue}",
+  "messageAdded": "Added: \"{task}\"",
+  "messageToggled": "Toggled: \"{task}\"",
+  "messageDeleted": "Deleted: \"{task}\"",
+  "controlsList": "(a)dd | (d)one | (x)delete | (j/k)ove | (q)uit",
+  "controlsAdd": "Type task and press Enter to save"
+}

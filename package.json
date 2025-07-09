@@ -1,0 +1,28 @@
+{
+  "name": "ink-todo-cli",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": "dist/cli.js",
+  "main": "dist/cli.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "ink": "^6.0.1",
+    "meow": "^13.2.0",
+    "react": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.12",
+    "@types/react": "^19.1.8",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
