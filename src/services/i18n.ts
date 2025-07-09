@@ -6,6 +6,7 @@ export type TKey =
 	| 'appTitle'
 	| 'noTasks'
 	| 'addTaskPrompt'
+	| 'editTaskPrompt'
 	| 'messageAdded'
 	| 'messageToggled'
 	| 'messageDeleted'
