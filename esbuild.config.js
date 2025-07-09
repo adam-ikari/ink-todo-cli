@@ -28,6 +28,11 @@ const config = {
   format: 'esm',
   external: ['react', 'ink', 'zustand', 'chalk', 'meow'],
   plugins: [babelPlugin],
+  minify: true,
+  mangleProps: /^_/,
+  minifyIdentifiers: true,
+  minifySyntax: true,
+  minifyWhitespace: true
 };
 
 esbuild.build(config).catch(() => process.exit(1));
