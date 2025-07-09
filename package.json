@@ -31,6 +31,7 @@
     "ink": "^6.0.1",
     "meow": "^13.2.0",
     "react": "^19.1.0",
+    "string-width": "^7.2.0",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
