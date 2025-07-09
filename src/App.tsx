@@ -17,6 +17,8 @@ export default function App() {
     setInputValue,
     moveUp,
     moveDown,
+    moveTaskUp,
+    moveTaskDown,
     addTask,
     toggleTask,
     deleteTask,
@@ -37,25 +39,33 @@ export default function App() {
     }
 
     if (mode === "list") {
-      if (key.downArrow || input === "j") {
+      if (key.shift && (key.downArrow || input === "j" || input === "J")) {
+        moveTaskDown();
+      } else if (key.shift && (key.upArrow || input === "k" || input === "K")) {
+        moveTaskUp();
+      } else if (key.downArrow || input === "j" || input === "J") {
         moveDown();
-      } else if (key.upArrow || input === "k") {
+      } else if (key.upArrow || input === "k" || input === "K") {
         moveUp();
       } else {
         switch (input) {
           case "q":
+          case "Q":
             exit();
             return;
           case " ":
             toggleTask();
             break;
           case "d":
+          case "D":
             deleteTask();
             break;
           case "a":
+          case "A":
             setMode("add");
             break;
           case "e":
+          case "E":
             if (tasks[selected]) {
               setInputValue(tasks[selected].label);
               setMode("edit");

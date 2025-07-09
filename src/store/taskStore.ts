@@ -84,6 +84,32 @@ export const useStore = create<AppState>((set, get) => ({
     set({ selected: newSelected });
   },
 
+  moveTaskUp: () => {
+    const { tasks, selected, filePath } = get();
+    if (selected <= 0 || tasks.length <= 1) return;
+    
+    const newTasks = [...tasks];
+    [newTasks[selected], newTasks[selected - 1]] = [newTasks[selected - 1], newTasks[selected]];
+    set({
+      tasks: newTasks,
+      selected: selected - 1
+    });
+    writeTasks(newTasks, filePath);
+  },
+
+  moveTaskDown: () => {
+    const { tasks, selected, filePath } = get();
+    if (selected >= tasks.length - 1 || tasks.length <= 1) return;
+    
+    const newTasks = [...tasks];
+    [newTasks[selected], newTasks[selected + 1]] = [newTasks[selected + 1], newTasks[selected]];
+    set({
+      tasks: newTasks,
+      selected: selected + 1
+    });
+    writeTasks(newTasks, filePath);
+  },
+
   addTask: () => {
     const { inputValue, tasks, t, mode, selected } = get();
     if (inputValue) {
