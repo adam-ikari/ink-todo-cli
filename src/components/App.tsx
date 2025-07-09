@@ -24,7 +24,7 @@ export default function App() {
   useInput((input, key) => {
     if (message) clearMessage();
 
-    if (mode === "add") {
+    if (mode === "add" || mode === "edit") {
       if (key.return) {
         addTask();
       } else if (key.backspace || key.delete) {
@@ -57,6 +57,12 @@ export default function App() {
         case "a":
           setMode("add");
           break;
+        case "e":
+          if (tasks[selected]) {
+            setInputValue(tasks[selected].label);
+            setMode("edit");
+          }
+          break;
       }
     }
   });
@@ -84,9 +90,14 @@ export default function App() {
 
       <Newline />
 
-      {mode === "add" && (
+      {(mode === "add" || mode === "edit") && (
         <Box>
-          <Text>{t("addTaskPrompt", { inputValue })}</Text>
+          <Text>
+            {mode === "add"
+              ? t("addTaskPrompt", { inputValue })
+              : t("editTaskPrompt", { inputValue })
+            }
+          </Text>
         </Box>
       )}
 

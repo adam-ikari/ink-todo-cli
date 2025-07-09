@@ -6,7 +6,7 @@ import {
   TKey,
 } from "../services/i18n.js";
 
-type Mode = "list" | "add" | "error" | "loading";
+type Mode = "list" | "add" | "edit" | "error" | "loading";
 
 interface AppState {
   // State
@@ -29,6 +29,7 @@ interface AppState {
   addTask: () => void;
   toggleTask: () => void;
   deleteTask: () => void;
+  editTask: (newLabel: string) => void;
 }
 
 export const useStore = create<AppState>((set, get) => ({
@@ -84,12 +85,24 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   addTask: () => {
-    const { inputValue, tasks, t } = get();
+    const { inputValue, tasks, t, mode, selected } = get();
     if (inputValue) {
-      const newTasks = [...tasks, { label: inputValue, completed: false }];
+      let newTasks;
+      let messageKey;
+      
+      if (mode === "edit") {
+        newTasks = tasks.map((task, i) =>
+          i === selected ? { ...task, label: inputValue } : task
+        );
+        messageKey = "messageEdited";
+      } else {
+        newTasks = [...tasks, { label: inputValue, completed: false }];
+        messageKey = "messageAdded";
+      }
+
       set({
         tasks: newTasks,
-        message: t("messageAdded", { task: inputValue }),
+        message: t(messageKey, { task: inputValue }),
       });
       writeTasks(newTasks, get().filePath);
     }
@@ -125,6 +138,20 @@ export const useStore = create<AppState>((set, get) => ({
         tasks: newTasks,
         selected: newSelected,
         message: t("messageDeleted", { task: taskToDelete.label }),
+      });
+      writeTasks(newTasks, get().filePath);
+    }
+  },
+
+  editTask: (newLabel: string) => {
+    const { tasks, selected, t } = get();
+    if (tasks[selected] && newLabel) {
+      const newTasks = tasks.map((task, i) =>
+        i === selected ? { ...task, label: newLabel } : task
+      );
+      set({
+        tasks: newTasks,
+        message: t("messageEdited", { task: newLabel }),
       });
       writeTasks(newTasks, get().filePath);
     }

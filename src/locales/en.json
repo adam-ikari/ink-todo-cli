@@ -3,9 +3,11 @@
   "appName": "mdtd",
   "noTasks": "No tasks. Press 'a' to add one.",
   "addTaskPrompt": "Add Task: {inputValue}",
+  "editTaskPrompt": "Edit Task: {inputValue}",
   "messageAdded": "Added: \"{task}\"",
   "messageToggled": "Toggled: \"{task}\"",
   "messageDeleted": "Deleted: \"{task}\"",
-  "controlsList": "(a)dd | (space) Toggle Done | (d)elete | (j/k)ove | (q)uit",
+  "messageEdited": "Edited: \"{task}\"",
+  "controlsList": "(a)dd | (e)dit | (space) Toggle Done | (d)elete | (j/k)ove | (q)uit",
   "controlsAdd": "Type task and press Enter to save"
 }
