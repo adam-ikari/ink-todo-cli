@@ -8,7 +8,7 @@ import {useStore} from './store/taskStore.js';
 const cli = meow(
 	`
 	Usage
-	  $ ink-todo-cli
+	  $ mdtd
 
 	Options
 		--lang  Language to use (e.g., 'en', 'zh')

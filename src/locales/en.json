@@ -1,5 +1,6 @@
 {
-  "appTitle": "Todo TUI",
+  "appTitle": "Markdown TODO",
+  "appName": "mdtd",
   "noTasks": "No tasks. Press 'a' to add one.",
   "addTaskPrompt": "Add Task: {inputValue}",
   "messageAdded": "Added: \"{task}\"",

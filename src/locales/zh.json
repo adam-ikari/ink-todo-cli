@@ -1,5 +1,6 @@
 {
-  "appTitle": "待办事项 TUI",
+  "appTitle": "Markdown 待办事项",
+  "appName": "mdtd",
   "noTasks": "没有任务。按 'a' 添加一个。",
   "addTaskPrompt": "添加任务: {inputValue}",
   "messageAdded": "已添加: \"{task}\"",
