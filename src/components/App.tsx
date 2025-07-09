@@ -48,10 +48,10 @@ export default function App() {
         case "ArrowUp":
           moveUp();
           break;
-        case "d":
+        case " ":
           toggleTask();
           break;
-        case "x":
+        case "d":
           deleteTask();
           break;
         case "a":

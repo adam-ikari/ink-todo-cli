@@ -5,6 +5,6 @@
   "messageAdded": "已添加: \"{task}\"",
   "messageToggled": "已切换: \"{task}\"",
   "messageDeleted": "已删除: \"{task}\"",
-  "controlsList": "(a)添加 | (d)完成 | (x)删除 | (j/k)移动 | (q)退出",
+  "controlsList": "(a)添加 | (space)切换完成 | (d)删除 | (j/k)移动 | (q)退出",
   "controlsAdd": "输入任务内容后按 Enter 保存"
 }

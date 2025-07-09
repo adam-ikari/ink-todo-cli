@@ -5,6 +5,6 @@
   "messageAdded": "Added: \"{task}\"",
   "messageToggled": "Toggled: \"{task}\"",
   "messageDeleted": "Deleted: \"{task}\"",
-  "controlsList": "(a)dd | (d)one | (x)delete | (j/k)ove | (q)uit",
+  "controlsList": "(a)dd | (space) Toggle Done | (d)elete | (j/k)ove | (q)uit",
   "controlsAdd": "Type task and press Enter to save"
 }
