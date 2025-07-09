@@ -47,7 +47,7 @@ export const useStore = create<AppState>((set, get) => ({
   /**
    * Initializes the application by loading translations and tasks.
    */
-  init: async (lang: string, filePath = 'todo.md') => {
+  init: async (lang: string, filePath = "todo.md") => {
     try {
       await i18nLoad(lang);
       const tasks = await readTasks(filePath);
@@ -89,7 +89,7 @@ export const useStore = create<AppState>((set, get) => ({
     if (inputValue) {
       let newTasks;
       let messageKey;
-      
+
       if (mode === "edit") {
         newTasks = tasks.map((task, i) =>
           i === selected ? { ...task, label: inputValue } : task
@@ -102,7 +102,7 @@ export const useStore = create<AppState>((set, get) => ({
 
       set({
         tasks: newTasks,
-        message: t(messageKey, { task: inputValue }),
+        message: t(messageKey as TKey, { task: inputValue }),
       });
       writeTasks(newTasks, get().filePath);
     }

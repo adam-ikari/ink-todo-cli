@@ -8,6 +8,7 @@ export type TKey =
 	| 'addTaskPrompt'
 	| 'editTaskPrompt'
 	| 'messageAdded'
+	| 'messageEdited'
 	| 'messageToggled'
 	| 'messageDeleted'
 	| 'controlsList'
