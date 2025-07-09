@@ -1,5 +1,5 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
+import enTranslations from '../locales/en.json' with { type: 'json' };
+import zhTranslations from '../locales/zh.json' with { type: 'json' };
 
 // Define a type for our translation keys for better type-safety
 export type TKey =
@@ -13,28 +13,20 @@ export type TKey =
 	| 'controlsList'
 	| 'controlsAdd';
 
-let translations: Record<string, string> = {};
+const translationsMap = {
+	en: enTranslations,
+	zh: zhTranslations
+};
+
+let translations: Record<string, string> = translationsMap.en;
 
 /**
- * Loads the translation file for the given language.
+ * Loads the translation for the given language.
  * Falls back to English if the specified language is not found.
  * @param lang The language code (e.g., 'en', 'zh').
  */
-export async function loadTranslations(lang: string): Promise<void> {
-	let filePath = path.resolve(
-		process.cwd(),
-		`src/locales/${lang}.json`,
-	);
-
-	try {
-		await fs.access(filePath);
-	} catch {
-		// Fallback to English if the language file doesn't exist
-		filePath = path.resolve(process.cwd(), `src/locales/en.json`);
-	}
-
-	const content = await fs.readFile(filePath, 'utf-8');
-	translations = JSON.parse(content);
+export function loadTranslations(lang: string): void {
+	translations = translationsMap[lang as keyof typeof translationsMap] || translationsMap.en;
 }
 
 /**
