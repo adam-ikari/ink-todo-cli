@@ -28,7 +28,7 @@ function parseTasks(content: string): Task[] {
 function formatTasks(tasks: Task[]): string {
 	return tasks
 		.map(task => `- [${task.completed ? 'x' : ' '}] ${task.label}`)
-		.join('\n');
+		.join('\n\n');
 }
 
 /**
