@@ -17,7 +17,8 @@
     "chalk": "^5.4.1",
     "ink": "^6.0.1",
     "meow": "^13.2.0",
-    "react": "^19.1.0"
+    "react": "^19.1.0",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@types/node": "^24.0.12",

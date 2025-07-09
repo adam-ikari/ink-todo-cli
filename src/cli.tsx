@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-import React from 'react';
+import React, {useEffect} from 'react';
 import {render} from 'ink';
 import meow from 'meow';
-import App from './ui.js';
+import App from './components/App.js';
+import {useStore} from './store/taskStore.js';
 
 const cli = meow(
 	`
@@ -23,4 +24,14 @@ const cli = meow(
 	},
 );
 
-render(<App lang={cli.flags.lang} />);
+function Main() {
+	const {init} = useStore();
+
+	useEffect(() => {
+		init(cli.flags.lang);
+	}, [init]);
+
+	return <App />;
+}
+
+render(<Main />);
