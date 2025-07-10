@@ -19,7 +19,13 @@ npx mdtd
 After installation, run:
 
 ```bash
-mdtd -f todo.md
+mdtd
+```
+
+or
+
+```bash
+mdtd filename.md
 ```
 
 ## Development
