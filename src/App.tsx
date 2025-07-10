@@ -45,23 +45,59 @@ export default function App() {
       } else if (key.shift && (key.upArrow || input === "k" || input === "K")) {
         moveTaskUp();
       } else if (key.leftArrow || input === "h" || input === "H") {
-        // 降低层级
+        // 提升层级到父任务同级
         const { tasks, selected } = useTaskStore.getState();
-        if ((tasks[selected]?.level || 0) > 0) {
-          const newTasks = tasks.map((task: Task & {level?: number}, i: number) =>
-            i === selected ? { ...task, level: (task.level || 0) - 1 } : task
+        const currentLevel = tasks[selected]?.level || 0;
+
+        // 查找最近的父任务
+        let parentLevel = -1;
+        for (let i = selected - 1; i >= 0; i--) {
+          if ((tasks[i].level || 0) < currentLevel) {
+            parentLevel = tasks[i].level || 0;
+            break;
+          }
+        }
+
+        if (parentLevel >= 0) {
+          const newTasks = tasks.map(
+            (task: Task & { level?: number }, i: number) =>
+              i === selected ? { ...task, level: parentLevel } : task
           );
           useTaskStore.setState({ tasks: newTasks });
           writeTasks(newTasks, useTaskStore.getState().filePath);
+        } else {
+          useTaskStore.setState({
+            message: "无法提升层级：找不到父任务",
+          });
         }
       } else if (key.rightArrow || input === "l" || input === "L") {
-        // 提升层级
+        // 降低层级
         const { tasks, selected } = useTaskStore.getState();
-        const newTasks = tasks.map((task: Task & {level?: number}, i: number) =>
-          i === selected ? { ...task, level: (task.level || 0) + 1 } : task
-        );
-        useTaskStore.setState({ tasks: newTasks });
-        writeTasks(newTasks, useTaskStore.getState().filePath);
+        const currentLevel = tasks[selected]?.level || 0;
+        if (selected > 0) {
+          // 确保不是第一个任务
+          const prevLevel = tasks[selected - 1]?.level || 0;
+          let newLevel = currentLevel;
+
+          if (currentLevel === 0) {
+            // 顶级任务降级
+            newLevel = prevLevel + 1; // 成为上一行任务的子任务
+          } else {
+            // 非顶级任务降级
+            newLevel = prevLevel < currentLevel ? prevLevel : currentLevel - 1;
+          }
+
+          const newTasks = tasks.map(
+            (task: Task & { level?: number }, i: number) =>
+              i === selected ? { ...task, level: newLevel } : task
+          );
+          useTaskStore.setState({ tasks: newTasks });
+          writeTasks(newTasks, useTaskStore.getState().filePath);
+        } else {
+          useTaskStore.setState({
+            message: "第一个任务不能降低层级",
+          });
+        }
       } else if (key.downArrow || input === "j" || input === "J") {
         moveDown();
       } else if (key.upArrow || input === "k" || input === "K") {
@@ -108,9 +144,11 @@ export default function App() {
       <Text bold>{t("appTitle")}</Text>
       <Newline />
 
-      {tasks.map((task: Task & {level?: number}, index: number) => (
+      {tasks.map((task: Task & { level?: number }, index: number) => (
         <Text key={index} color={selected === index ? "cyan" : "white"}>
-          {selected === index ? "> " : "  "}{"  ".repeat(task.level || 0)}[{task.completed ? "x" : " "}] {task.label}
+          {selected === index ? "> " : "  "}
+          {"  ".repeat(task.level || 0)}[{task.completed ? "x" : " "}]{" "}
+          {task.label}
         </Text>
       ))}
       {tasks.length === 0 && mode === "list" && <Text>{t("noTasks")}</Text>}
