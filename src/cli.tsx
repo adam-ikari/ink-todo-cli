@@ -2,8 +2,8 @@
 import React, { useEffect } from "react";
 import { render } from "ink";
 import meow from "meow";
-import App from "./App.tsx";
-import { useTaskStore } from "./store/taskStore.ts";
+import App from "@/App.tsx";
+import { useTaskStore } from "@/store/taskStore.ts";
 
 const cli = meow(
   `
@@ -35,6 +35,10 @@ function Main() {
 
   useEffect(() => {
     init(cli.flags.lang, cli.input[0]);
+    process.stdout.write("\x1b[?1049h");
+    process.on("exit", () => {
+      process.stdout.write("\x1b[?1049l");
+    });
   }, [init]);
 
   return <App />;

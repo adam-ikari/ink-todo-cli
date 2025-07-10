@@ -1,12 +1,12 @@
 import { create } from "zustand";
-import { Task, readTasks, writeTasks } from "../services/fileManager.js";
-import { loadTranslations as i18nLoad, t, TKey } from "../services/i18n.js";
+import { Task, readTasks, writeTasks } from "@/services/fileManager.ts";
+import { loadTranslations as i18nLoad, t, TKey } from "@/services/i18n.ts";
 
 type Mode = "list" | "add" | "edit" | "error" | "loading";
 
 interface TaskState {
   // State
-  tasks: Task[];
+  tasks: (Task & { level?: number })[];
   selected: number;
   mode: Mode;
   inputValue: string;
@@ -47,7 +47,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   init: async (lang: string, filePath = "todo.md") => {
     try {
       await i18nLoad(lang);
-    const tasks = await readTasks(filePath);
+      const tasks = await readTasks(filePath);
       set({ lang, tasks, mode: "list", filePath });
     } catch (err: any) {
       set({ mode: "error", message: err.message });
@@ -118,7 +118,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         );
         messageKey = "messageEdited";
       } else {
-        newTasks = [...tasks, { label: inputValue, completed: false }];
+        newTasks = [...tasks, { label: inputValue, completed: false, level: 0 }];
         messageKey = "messageAdded";
       }
 
@@ -134,9 +134,40 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   toggleTask: () => {
     const { tasks, selected } = get();
     if (tasks[selected]) {
-      const newTasks = tasks.map((task, i) =>
-        i === selected ? { ...task, completed: !task.completed } : task
-      );
+      const newTasks = [...tasks];
+      // 切换当前任务状态
+      newTasks[selected] = {
+        ...newTasks[selected],
+        completed: !newTasks[selected].completed
+      };
+
+      // 检查并更新父任务状态
+      const updateParentTask = (taskIndex: number) => {
+        const currentLevel = newTasks[taskIndex].level || 0;
+        // 查找父任务(最近的level较小的任务)
+        for (let i = taskIndex - 1; i >= 0; i--) {
+          if ((newTasks[i].level || 0) < currentLevel) {
+            // 检查所有子任务是否完成
+            const children = newTasks.slice(i + 1).filter(
+              t => (t.level || 0) > (newTasks[i].level || 0)
+            );
+            const allChildrenCompleted = children.every(t => t.completed);
+            // 更新父任务状态
+            if (allChildrenCompleted !== newTasks[i].completed) {
+              newTasks[i] = {
+                ...newTasks[i],
+                completed: allChildrenCompleted
+              };
+              // 递归更新更上层的父任务
+              updateParentTask(i);
+            }
+            break;
+          }
+        }
+      };
+
+      updateParentTask(selected);
+
       const task = newTasks[selected];
       set({
         tasks: newTasks,
