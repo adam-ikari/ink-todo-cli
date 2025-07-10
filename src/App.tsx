@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Text, Box, Newline, useInput, useApp } from "ink";
 import { useTaskStore } from "@/store/taskStore.ts";
+import { Task, writeTasks } from "@/services/fileManager.ts";
 import InputBox from "@/components/InputBox.tsx";
 import { t } from "@/services/i18n.ts";
 
@@ -43,6 +44,24 @@ export default function App() {
         moveTaskDown();
       } else if (key.shift && (key.upArrow || input === "k" || input === "K")) {
         moveTaskUp();
+      } else if (key.leftArrow || input === "h" || input === "H") {
+        // 降低层级
+        const { tasks, selected } = useTaskStore.getState();
+        if ((tasks[selected]?.level || 0) > 0) {
+          const newTasks = tasks.map((task: Task & {level?: number}, i: number) =>
+            i === selected ? { ...task, level: (task.level || 0) - 1 } : task
+          );
+          useTaskStore.setState({ tasks: newTasks });
+          writeTasks(newTasks, useTaskStore.getState().filePath);
+        }
+      } else if (key.rightArrow || input === "l" || input === "L") {
+        // 提升层级
+        const { tasks, selected } = useTaskStore.getState();
+        const newTasks = tasks.map((task: Task & {level?: number}, i: number) =>
+          i === selected ? { ...task, level: (task.level || 0) + 1 } : task
+        );
+        useTaskStore.setState({ tasks: newTasks });
+        writeTasks(newTasks, useTaskStore.getState().filePath);
       } else if (key.downArrow || input === "j" || input === "J") {
         moveDown();
       } else if (key.upArrow || input === "k" || input === "K") {
@@ -89,10 +108,9 @@ export default function App() {
       <Text bold>{t("appTitle")}</Text>
       <Newline />
 
-      {tasks.map((task, index) => (
+      {tasks.map((task: Task & {level?: number}, index: number) => (
         <Text key={index} color={selected === index ? "cyan" : "white"}>
-          {selected === index ? "> " : "  "}[{task.completed ? "x" : " "}]{" "}
-          {task.label}
+          {selected === index ? "> " : "  "}{"  ".repeat(task.level || 0)}[{task.completed ? "x" : " "}] {task.label}
         </Text>
       ))}
       {tasks.length === 0 && mode === "list" && <Text>{t("noTasks")}</Text>}

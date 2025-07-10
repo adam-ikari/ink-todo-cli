@@ -4,6 +4,7 @@ import path from 'node:path';
 export interface Task {
 	label: string;
 	completed: boolean;
+	level?: number;
 }
 
 /**
@@ -21,11 +22,13 @@ function parseTasks(content: string): Task[] {
 		}
 	}
 
-	const lines = contentWithoutMeta.split('\n').filter(line => line.startsWith('- ['));
+	const lines = contentWithoutMeta.split('\n').filter(line => line.trim().startsWith('- ['));
 	return lines.map(line => {
-		const completed = line.startsWith('- [x]');
-		const label = line.replace(/- \[[x ]\] /, '').trim();
-		return {label, completed};
+		const completed = line.trim().startsWith('- [x]');
+		const spaces = line.match(/^\s*/)?.[0] || '';
+		const level = Math.floor(spaces.length / 2);
+		const label = line.replace(/^\s*- \[[x ]\] /, '').trim();
+		return {label, completed, level};
 	});
 }
 
@@ -41,7 +44,7 @@ function formatTasks(tasks: Task[]): string {
 
 	const title = "# TODO\n";
 	const content = tasks
-		.map(task => `- [${task.completed ? 'x' : ' '}] ${task.label}`).join('\n');
+		.map(task => `${'  '.repeat(task.level || 0)}- [${task.completed ? 'x' : ' '}] ${task.label}`).join('\n');
 	return [title, content].join('\n') + "\n";
 }
 
