@@ -1,5 +1,5 @@
-import enTranslations from '../locales/en.json' with { type: 'json' };
-import zhTranslations from '../locales/zh.json' with { type: 'json' };
+import enTranslations from '@/locales/en.json' with { type: 'json' };
+import zhTranslations from '@/locales/zh.json' with { type: 'json' };
 
 // Define a type for our translation keys for better type-safety
 export type TKey =

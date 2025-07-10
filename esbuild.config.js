@@ -1,6 +1,7 @@
 import esbuild from 'esbuild';
 import { transform } from '@babel/core';
 import fs from 'fs';
+import path from 'path';
 
 const babelPlugin = {
   name: 'babel',
@@ -17,6 +18,9 @@ const babelPlugin = {
 };
 
 const config = {
+  alias: {
+    '@': path.join(process.cwd(), 'src')
+  },
   entryPoints: ['src/cli.tsx'],
   bundle: true,
   loader: {

@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { Task, readTasks, writeTasks } from "../services/fileManager.js";
-import { loadTranslations as i18nLoad, t, TKey } from "../services/i18n.js";
+import { Task, readTasks, writeTasks } from "@/services/fileManager.ts";
+import { loadTranslations as i18nLoad, t, TKey } from "@/services/i18n.ts";
 
 type Mode = "list" | "add" | "edit" | "error" | "loading";
 
@@ -47,7 +47,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   init: async (lang: string, filePath = "todo.md") => {
     try {
       await i18nLoad(lang);
-    const tasks = await readTasks(filePath);
+      const tasks = await readTasks(filePath);
       set({ lang, tasks, mode: "list", filePath });
     } catch (err: any) {
       set({ mode: "error", message: err.message });

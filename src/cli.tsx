@@ -2,8 +2,8 @@
 import React, { useEffect } from "react";
 import { render } from "ink";
 import meow from "meow";
-import App from "./App.tsx";
-import { useTaskStore } from "./store/taskStore.ts";
+import App from "@/App.tsx";
+import { useTaskStore } from "@/store/taskStore.ts";
 
 const cli = meow(
   `

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Text, Box, Newline, useInput, useApp } from "ink";
-import { useTaskStore } from "./store/taskStore.ts";
-import InputBox from "./components/InputBox.tsx";
-import { t } from "./services/i18n.js";
+import { useTaskStore } from "@/store/taskStore.ts";
+import InputBox from "@/components/InputBox.tsx";
+import { t } from "@/services/i18n.ts";
 
 export default function App() {
   const { exit } = useApp();
