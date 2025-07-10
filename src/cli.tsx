@@ -35,6 +35,10 @@ function Main() {
 
   useEffect(() => {
     init(cli.flags.lang, cli.input[0]);
+    process.stdout.write("\x1b[?1049h");
+    process.on("exit", () => {
+      process.stdout.write("\x1b[?1049l");
+    });
   }, [init]);
 
   return <App />;
